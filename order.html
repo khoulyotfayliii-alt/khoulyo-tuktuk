@@ -1,21 +1,15 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="style.css"><title>طلب</title></head><body>
-<header class="top"><button class="back" onclick="history.back()">←</button><h2 id="title">طلب مشوار</h2><span id="typeIcon">🛺</span></header>
-<main class="form">
-<div class="field"><label>نوع الطلب</label><input id="type" readonly></div>
-<div class="field"><label>📍 مكان الانطلاق</label><input id="from" placeholder="مثال: النبطية"></div>
-<div class="field"><label>📍 الوجهة</label><input id="to" placeholder="مثال: كفررمان"></div>
-<div class="field"><label>🕐 الوقت (اختياري)</label><input id="time" type="time"></div>
-<div class="field"><label>💬 ملاحظات (اختياري)</label><textarea id="notes" placeholder="مثال: قرب المدرسة"></textarea></div>
-<button class="send" onclick="submitOrder()">إرسال الطلب 🚀</button>
-<p class="small">سيظهر طلبك في قسم «طلباتي» بعد الإرسال.</p></main>
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>طلب - Khoulyo</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="top"><a class="back" href="index.html">←</a><div class="brand"><b>K</b><span>Khoulyo<small>TUKTUK</small></span></div><span></span></header>
+<main class="page"><div class="section-title"><h1 id="title">طلب مشوار</h1><span id="typeIcon">🛺</span></div><div class="form-card"><form id="orderForm"><div id="dynamic"></div><div class="field"><label>رقم الهاتف</label><input id="phone" inputmode="tel" required placeholder="70xxxxxx"></div><button id="submit" class="submit redbtn" type="submit">إرسال الطلب ➤</button></form></div><div class="quick"><a href="https://wa.me/96170309657">ما بدك تعبي البيانات؟ احكيني واتساب مباشرة</a></div></main>
 <script>
-const params=new URLSearchParams(location.search), type=params.get('type')||'مشوار عادي';
-document.getElementById('type').value=type; document.getElementById('title').textContent=type;
-function submitOrder(){
- const from=document.getElementById('from').value.trim(),to=document.getElementById('to').value.trim();
- if(!from||!to){alert('رجاءً عبّي مكان الانطلاق والوجهة');return}
- const orders=JSON.parse(localStorage.getItem('orders')||'[]');
- orders.unshift({id:Date.now(),type,from,to,time:document.getElementById('time').value,notes:document.getElementById('notes').value,status:'قيد التنفيذ',date:new Date().toLocaleDateString('ar-LB')});
- localStorage.setItem('orders',JSON.stringify(orders)); location.href='orders.html';
-}
+const qs=new URLSearchParams(location.search),type=qs.get("type")||"مشوار عادي";
+title.textContent=type;
+const icon=type==="توصيل أغراض"?"📦":type==="نقل طلاب"?"🎓":type==="نقل موظفين"?"💼":"🛺";typeIcon.textContent=icon;
+submit.className="submit "+(type==="توصيل أغراض"?"yellowbtn":type==="نقل طلاب"?"bluebtn":type==="نقل موظفين"?"greenbtn":"redbtn");
+const fields=type==="توصيل أغراض"?`<div class="field"><label>نوع الغرض</label><select id="item" required><option value="">اختر نوع الغرض</option><option>أغراض شخصية</option><option>طعام</option><option>مستندات</option><option>أخرى</option></select></div><div class="field"><label>مكان الاستلام</label><input id="from" required placeholder="مثال: النبطية"></div><div class="field"><label>مكان التسليم</label><input id="to" required placeholder="مثال: تول"></div><div class="field"><label>ملاحظات (اختياري)</label><textarea id="notes" placeholder="مثال: حساس، سريع ..."></textarea></div>`:
+type==="نقل طلاب"?`<div class="field"><label>اسم الطالب</label><input id="student" required placeholder="مثال: أحمد"></div><div class="field"><label>المدرسة / الجامعة</label><input id="school" required placeholder="مثال: مدرسة النبطية الرسمية"></div><div class="field"><label>مكان الانطلاق</label><input id="from" required placeholder="مثال: النبطية"></div><div class="field"><label>ملاحظات (اختياري)</label><textarea id="notes" placeholder="مثال: يومياً - ساعة 7 صباحاً"></textarea></div>`:
+type==="نقل موظفين"?`<div class="field"><label>اسم الشركة / العمل</label><input id="company" required placeholder="مثال: مستشفى النبطية"></div><div class="field"><label>مكان الانطلاق</label><input id="from" required placeholder="مثال: النبطية"></div><div class="field"><label>الوجهة</label><input id="to" required placeholder="مثال: صيدا"></div><div class="field"><label>مواعيد النقل</label><input id="schedule" placeholder="مثال: صباحاً ومساءً"></div><div class="field"><label>ملاحظات (اختياري)</label><textarea id="notes" placeholder="أي تفاصيل إضافية"></textarea></div>`:
+`<div class="field"><label>مكان الانطلاق</label><input id="from" required placeholder="مثال: النبطية"></div><div class="field"><label>الوجهة</label><input id="to" required placeholder="مثال: كفررمان"></div><div class="field"><label>الوقت (اختياري)</label><input id="time" placeholder="الآن"></div><div class="field"><label>ملاحظات (اختياري)</label><textarea id="notes" placeholder="مثال: قرب المدرسة"></textarea></div>`;
+dynamic.innerHTML=fields;
+orderForm.onsubmit=e=>{e.preventDefault();const val=id=>document.getElementById(id)?.value||"";const o={id:Date.now(),type,phone:val("phone"),from:val("from"),to:val("to"),time:val("time")||"الآن",notes:val("notes"),status:"قيد التنفيذ",date:new Date().toLocaleString("ar-LB")};let a=JSON.parse(localStorage.getItem("orders")||"[]");a.unshift(o);localStorage.setItem("orders",JSON.stringify(a));location.href="orders.html"};
 </script></body></html>

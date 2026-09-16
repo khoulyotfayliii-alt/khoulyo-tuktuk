@@ -1,7 +1,7 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="style.css"><title>تفاصيل الطلب</title></head><body>
-<header class="top"><button class="back" onclick="history.back()">←</button><h2>تفاصيل الطلب</h2><span>🛺</span></header><main id="box" class="form"></main>
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تفاصيل الطلب</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="top"><a class="back" href="orders.html">←</a><h2>تفاصيل الطلب</h2><span>🛺</span></header><main class="page"><div id="box"></div></main>
 <script>
-const id=new URLSearchParams(location.search).get('id'),a=JSON.parse(localStorage.getItem('orders')||'[]'),o=a.find(x=>String(x.id)===String(id)),box=document.getElementById('box');
-if(!o) box.innerHTML='<div class="empty">الطلب غير موجود</div>'; else box.innerHTML=`<article class="form-card"><h3>${o.type}</h3><div class="details"><span>رقم الطلب</span><b>#${String(o.id).slice(-4)}</b><span>التاريخ</span><b>${o.date}</b><span>من</span><b>${o.from}</b><span>إلى</span><b>${o.to}</b><span>الحالة</span><b>${o.status}</b><span>ملاحظات</span><b>${o.notes||'—'}</b></div><button class="danger" onclick="cancelOrder()">إلغاء الطلب ✕</button></article>`;
-function cancelOrder(){localStorage.setItem('orders',JSON.stringify(a.filter(x=>String(x.id)!==String(o.id))));location.href='orders.html'}
+let id=new URLSearchParams(location.search).get("id"),a=JSON.parse(localStorage.getItem("orders")||"[]"),o=a.find(x=>String(x.id)===String(id));
+box.innerHTML=o?`<article class="form-card"><div class="order-head"><div class="order-title">🛺 ${o.type}</div><span class="status ${o.status==="مكتمل"?"done":""}">${o.status}</span></div><div class="details-row"><span>رقم الطلب</span><b>#${String(o.id).slice(-4)}</b></div><div class="details-row"><span>التاريخ</span><b>${o.date}</b></div><div class="details-row"><span>من</span><b>${o.from||"—"}</b></div><div class="details-row"><span>إلى</span><b>${o.to||"—"}</b></div><div class="details-row"><span>ملاحظات</span><b>${o.notes||"—"}</b></div><button class="fullbtn" onclick="cancelOrder()">إلغاء الطلب ✕</button></article>`:"<div class='empty'>الطلب غير موجود</div>";
+function cancelOrder(){a=a.filter(x=>x.id!==o.id);localStorage.setItem("orders",JSON.stringify(a));location.href="orders.html"}
 </script></body></html>
