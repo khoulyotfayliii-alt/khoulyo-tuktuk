@@ -1,1 +1,1 @@
-// Khoulyo TUKTUK V2 - shared helpers reserved for future server connection.
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
