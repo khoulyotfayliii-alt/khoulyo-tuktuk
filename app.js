@@ -1,0 +1,1 @@
+function toggleMenu(){location.href='more.html'}

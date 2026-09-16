@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إرسال الطلب - Khoulyo</title><link rel="stylesheet" href="style.css"></head>
+<body><header class="top"><a href="index.html">←</a><div class="brand"><b>K</b><span>Khoulyo<small>TUKTUK</small></span></div></header>
+<main><h2 id="title">طلب مشوار</h2>
+<form id="orderForm">
+<label>مكان الانطلاق<input id="from" required placeholder="مثال: النبطية"></label>
+<label>الوجهة<input id="to" required placeholder="مثال: كفررمان"></label>
+<label>الوقت <small>(اختياري)</small><input id="time" placeholder="الآن"></label>
+<label>رقم الهاتف<input id="phone" inputmode="tel" required placeholder="70xxxxxx"></label>
+<label>ملاحظات <small>(اختياري)</small><textarea id="notes" placeholder="مثال: قرب المدرسة"></textarea></label>
+<button class="submit" type="submit">إرسال الطلب ➤</button>
+</form>
+<div class="quick"><a href="https://wa.me/96170309657">ما بدك تعبي البيانات؟ احكيني واتساب مباشرة</a></div>
+</main><script>
+const p=new URLSearchParams(location.search); document.getElementById('title').textContent=p.get('type')||'طلب مشوار';
+document.getElementById('orderForm').onsubmit=e=>{e.preventDefault();let o={id:Date.now(),type:document.getElementById('title').textContent,from:from.value,to:to.value,time:time.value||'الآن',phone:phone.value,notes:notes.value,status:'قيد التنفيذ',date:new Date().toLocaleString('ar-LB')};let a=JSON.parse(localStorage.getItem('orders')||'[]');a.unshift(o);localStorage.setItem('orders',JSON.stringify(a));location.href='orders.html'};
+</script></body></html>

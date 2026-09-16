@@ -1,0 +1,10 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة التحكم</title><link rel="stylesheet" href="style.css"></head>
+<body><header class="top"><div class="brand"><b>K</b><span>لوحة التحكم<small>Khoulyo</small></span></div></header>
+<main><h2>طلبات الزبائن</h2><div class="admin-actions"><button onclick="render()">تحديث الطلبات</button><button onclick="clearAll()">حذف الكل</button></div><div id="adminList"></div></main>
+<script>
+function render(){let a=JSON.parse(localStorage.getItem('orders')||'[]'),l=document.getElementById('adminList');l.innerHTML=a.length?a.map((o,i)=>`<article class="order"><div><b>${o.type}</b><span class="badge">${o.status}</span></div><p>👤 ${o.phone}<br>📍 من: ${o.from}<br>📍 إلى: ${o.to}<br>🕐 ${o.time}<br>💬 ${o.notes||'—'}</p><div class="admin-buttons"><button onclick="done(${i})">✓ تأكيد</button><a href="https://wa.me/961${String(o.phone).replace(/^0/,'')}" target="_blank">واتساب</a><button onclick="removeO(${i})">حذف</button></div></article>`).join(''):'<div class="empty">لا يوجد طلبات</div>'}
+function save(a){localStorage.setItem('orders',JSON.stringify(a));render()}
+function done(i){let a=JSON.parse(localStorage.getItem('orders')||'[]');a[i].status='تم التأكيد';save(a)}
+function removeO(i){let a=JSON.parse(localStorage.getItem('orders')||'[]');a.splice(i,1);save(a)}
+function clearAll(){localStorage.removeItem('orders');render()} render();
+</script></body></html>

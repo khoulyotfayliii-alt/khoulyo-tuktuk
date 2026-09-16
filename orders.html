@@ -1,0 +1,6 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>طلباتي</title><link rel="stylesheet" href="style.css"></head>
+<body><header class="top"><a href="index.html">←</a><h2>طلباتي</h2></header><main><div id="list"></div></main>
+<script>
+let a=JSON.parse(localStorage.getItem('orders')||'[]');let l=document.getElementById('list');
+l.innerHTML=a.length?a.map(o=>`<article class="order"><div><b>${o.type}</b><span class="badge">${o.status}</span></div><p>من: ${o.from}<br>إلى: ${o.to}<br>الوقت: ${o.time}</p><small>${o.date}</small></article>`).join(''):'<div class="empty">لا يوجد طلبات بعد</div>';
+</script></body></html>
